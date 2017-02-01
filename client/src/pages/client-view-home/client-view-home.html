@@ -1,0 +1,52 @@
+
+<ion-header>
+
+  <ion-navbar color="dark">
+    <ion-title>Client Home</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-card padding class="bg-red">
+    <ion-row>
+      <ion-col >
+        <ion-icon name="person"></ion-icon>
+        <h1><strong>{{clientDetails?.name.toUpperCase()}}</strong></h1>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col >
+        <ion-item color="danger"><ion-icon name="mail" item-left></ion-icon>{{clientDetails?.email}}</ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col >
+        <ion-item color="danger"><ion-icon name="person" item-left></ion-icon>{{clientDetails?.username}}</ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col >
+        <ion-item color="danger"><ion-icon name="body" item-left></ion-icon>77.5 kg</ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <button  color="danger" ion-item padding-bottom (click)="goToClientDetailPage(clientDetails?.username)">
+    <ion-icon name="person" item-left></ion-icon>
+    Details
+  </button>
+
+  <button  color="danger" ion-item (click)="goToClientProgramPage(clientDetails?.username)">
+    <ion-icon name="bicycle" item-left></ion-icon>
+    Program
+  </button>
+
+  <button  color="danger" ion-item>
+    <ion-icon name="pizza" item-left></ion-icon>
+    Diet
+  </button>
+
+</ion-content>

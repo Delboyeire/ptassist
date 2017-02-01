@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>ClientList</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="bg">
+    <button ion-button icon-left block color="danger" (click)="goToAddClient(trainerId)">
+      <ion-icon name="add"></ion-icon>
+      Add A  New Client
+    </button>
+  <ion-list class="client-list">
+    <ion-item  *ngFor="let client of clientList" >
+      <button ion-item color="danger" (click)="goToClientViewHome(client?.username)">
+        <ion-icon name="contact" item-left></ion-icon>
+        <h2>{{client?.name}}</h2>
+        <p>{{client?.email}}</p>
+      </button>
+    </ion-item>
+
+  </ion-list>
+</ion-content>
