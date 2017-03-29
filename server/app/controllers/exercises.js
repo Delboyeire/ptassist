@@ -1,13 +1,26 @@
 var Exercise = require('../models/exercise');
  
-exports.getTodos = function(req, res, next){
+exports.getExercises = function(req, res, next){
  
     Exercise.find(function(err, exercises) {
  
         if (err){
             res.send(err);
         }
+        res.json(exercises);
  
+    });
+ 
+}
+exports.getExercisesForProgram = function(req, res, next){
+
+    exercise_ids = req.body.exercise_ids;
+ 
+    Exercise.find({ "_id": { "$in": [exercise_ids ] } },function(err, exercises) {
+ 
+        if (err){
+            res.send(err);
+        }
         res.json(exercises);
  
     });
@@ -19,20 +32,21 @@ exports.createExercise = function(req, res, next){
     Exercise.create({
         name : req.body.name,
         description: req.body.description,
-        videolink: req.body.videolink
-
+        video: req.body.video,
+        image: req.body.image
+        
     }, function(err, exercise) {
- 
+        
         if (err){
             res.send(err);
         }
  
-        Todo.find(function(err, exercise) {
+        Exercise.find(function(err, exercises) {
  
             if (err){
                 res.send(err);
             }
- 
+    
             res.json(exercises);
  
         });
@@ -43,10 +57,14 @@ exports.createExercise = function(req, res, next){
  
 exports.deleteExercise = function(req, res, next){
  
-    Todo.remove({
-        _id : req.params.todo_id
-    }, function(err, todo) {
-        res.json(todo);
+    Exercise.remove({
+        _id : req.params.exercise_id
+    }, function(err, exercise) {
+        if (err){
+                res.send(err);
+        }
+
+        res.json(exercise);
     });
  
 }

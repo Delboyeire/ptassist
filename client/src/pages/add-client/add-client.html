@@ -1,50 +1,32 @@
 <ion-header>
-  <ion-navbar color="nav">
+  <ion-navbar color="dark">
     <ion-title>
-      Create A Client
+      Register A Client
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
-  <img src="http://placehold.it/300x100">
-  <form [formGroup]="signupForm" (submit)="signupClient()" novalidate>
+<ion-content class="bgAuth">
+  <ion-content class="bgAuth">
+    <form [formGroup]="clientform" (ngSubmit)="registerClient()">
+      <ion-item>
+        <ion-label color="primary" stacked>Name</ion-label>
+        <ion-input type="text" formControlName="name" placeholder="Enter Client Name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" stacked>Email</ion-label>
+        <ion-input type="email" formControlName="email" placeholder="Enter Client Email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary" stacked>Password</ion-label>
+        <ion-input type="password" formControlName="password" placeholder="Enter Client Password"></ion-input>
+      </ion-item>
 
-    <ion-item>
-      <ion-label stacked>Email</ion-label>
-      <ion-input #email formControlName="email" type="email" (change)="elementChanged(email)"
-                 placeholder="Your email address"
-                 [class.invalid]="!signupForm.controls.email.valid && (emailChanged || submitAttempt)"></ion-input>
-    </ion-item>
-    <ion-item class="error-message" *ngIf="!signupForm.controls.email.valid  && (emailChanged || submitAttempt)">
-      <p>Please enter a valid email.</p>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>Unique Username</ion-label>
-      <ion-input #username formControlName="username" type="text" (change)="elementChanged(username)"
-                 placeholder="Enter a unique username"
-                 [class.invalid]="!signupForm.controls.username.valid && (usernameChanged || submitAttempt)"></ion-input>
-    </ion-item>
-    <ion-item class="error-message" *ngIf="!signupForm.controls.username.valid  && (usernameChanged || submitAttempt)">
-      <p>Please enter a valid username.</p>
-    </ion-item>
+      <button ion-button block round color="danger" type="submit" [disabled]="!clientform.valid">Submit</button>
+      <button ion-button block round color="danger" (click)="dismiss()" >Cancel</button>
+    </form>
 
-    <ion-item>
-      <ion-label stacked>Name</ion-label>
-      <ion-input #name formControlName="name" type="text" (change)="elementChanged(name)"
-                 placeholder="Your Full name"
-                 [class.invalid]="!signupForm.controls.name.valid && (nameChanged || submitAttempt)"></ion-input>
-    </ion-item>
-    <ion-item class="error-message" *ngIf="!signupForm.controls.name.valid  && (nameChanged || submitAttempt)">
-      <p>Name needs to be your name.</p>
-    </ion-item>
 
-    <button ion-button block type="submit">
-      Create an Account
-    </button>
-
-  </form>
-
-</ion-content>
+  </ion-content>
 

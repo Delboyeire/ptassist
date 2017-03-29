@@ -8,23 +8,85 @@
 
   <ion-navbar color="dark">
     <ion-title>ProgramViewEdit</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showAddClientProgramModal()"><ion-icon name="add"></ion-icon></button>
+    </ion-buttons>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="logout()"><ion-icon name="power"></ion-icon></button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content class="bgAuth" padding>
+  <ion-item>
+    <ion-label color="danger" stacked> Clients Current Programs</ion-label>
+    <ion-list transparent>
 
+      <ion-item-sliding *ngFor="let program of clientprograms" transparent>
 
-      <ion-list inset>
+        <ion-item >
+          {{program.program_details.name}}
+          {{program.program_details.description}}
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="deleteProgram(program)">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
 
-        <button ion-item *ngFor="let item of items?.Exercises" >
+    </ion-list>
+  </ion-item>
+    <ion-item>
+      <ion-label color="danger" stacked>Select Program</ion-label>
+      <ion-select [(ngModel)]="selectedProgramid" (ionChange)="showExercises()">
+        <ion-option color="danger" *ngFor="let program of programs" value="{{program._id}}" >{{program.title}}</ion-option>
+      </ion-select>
+    </ion-item>
+  <ion-item *ngIf="selectedProgram">
+    <button ion-button large color="danger"(click)="addClientProgram()">
+      <ion-icon name="add"></ion-icon>
+      video
+    </button>
+  </ion-item>
+      <ion-list transparent>
+        <ion-item-sliding *ngFor="let exercise of program_exercises" transparent>
+          <ion-item>
+            <ion-card>
+              <ion-row>
+                <ion-col width-25>
+                  <ion-thumbnail item-left>
+                    <img src="{{exercise.details.image}}">
+                  </ion-thumbnail>
+                </ion-col>
+                <ion-col width-50>
+                  <ion-card-header>
 
-
-
-        </button>
+                    {{exercise.details.name}}
+                  </ion-card-header>
+                  <ion-card-content>
+                    Instructions: {{exercise.details.description}}
+                    Sets : {{exercise.sets}}
+                  </ion-card-content>
+                </ion-col>
+                <ion-col width-25>
+                  <ion-card-header>
+                    Sets : {{exercise.sets}}
+                  </ion-card-header>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </ion-item>
+          <ion-item-options side="left">
+            <button ion-button (click)="showVideo(exercise.details)">
+              <ion-icon name="videocam"></ion-icon>
+              video
+            </button>
+          </ion-item-options>
+        </ion-item-sliding>
       </ion-list>
-
-
 
 </ion-content>

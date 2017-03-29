@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
+var Program = require('../models/program');
  
 var UserSchema = new mongoose.Schema({
  
@@ -19,8 +20,26 @@ var UserSchema = new mongoose.Schema({
         default: 'client'
     },
     trainer: {
-        type: Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId, 
         ref: 'User'
+    },
+    programs:  [
+       {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: 'Program'
+            }
+        ],
+    stats: 
+       {
+          weight: 
+              [
+                 { type: Number}
+              ],
+            
+        },
+    name: {
+        type: String,
+        required: true
     }
  
 }, {
@@ -69,16 +88,6 @@ UserSchema.methods.comparePassword = function(passwordAttempt, cb){
     });
  
 }
-
-User.findClients({ role: 'client' }).where('trainer').gt(this.user.ObjectId).exec(function(err, users) {
-  if (err){
-      throw err;
-  } else {
-       return users
-  }
-
- 
-});
 
 
  

@@ -8,23 +8,18 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding class="bgAuth">
 
   <ion-card padding class="bg-red">
     <ion-row>
       <ion-col >
         <ion-icon name="person"></ion-icon>
-        <h1><strong>{{clientDetails?.name.toUpperCase()}}</strong></h1>
+        <h1 color="dark"><strong>{{client?.name.toUpperCase()}}</strong></h1>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col >
-        <ion-item color="danger"><ion-icon name="mail" item-left></ion-icon>{{clientDetails?.email}}</ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col >
-        <ion-item color="danger"><ion-icon name="person" item-left></ion-icon>{{clientDetails?.username}}</ion-item>
+        <ion-item color="danger"><ion-icon name="mail" item-left></ion-icon>{{client?.email}}</ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -34,19 +29,26 @@
     </ion-row>
   </ion-card>
 
-  <button  color="danger" ion-item padding-bottom (click)="goToClientDetailPage(clientDetails?.username)">
-    <ion-icon name="person" item-left></ion-icon>
+  <button ion-button block round color="danger"  (click)="goToClientDetailPage(client)">
+    <ion-icon name="person"></ion-icon>
     Details
   </button>
 
-  <button  color="danger" ion-item (click)="goToClientProgramPage(clientDetails?.username)">
-    <ion-icon name="bicycle" item-left></ion-icon>
+
+  <button  ion-button block round color="danger" (click)="goToClientProgramPage(client)">
+    <ion-icon name="bicycle"></ion-icon>
     Program
   </button>
 
-  <button  color="danger" ion-item>
-    <ion-icon name="pizza" item-left></ion-icon>
+
+  <button  ion-button block round color="danger">
+    <ion-icon name="pizza"></ion-icon>
     Diet
+  </button>
+
+  <button  ion-button block round color="danger">
+    <ion-icon name="pulse"></ion-icon>
+    Stats
   </button>
 
 </ion-content>

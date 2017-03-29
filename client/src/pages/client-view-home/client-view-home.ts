@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams} from 'ionic-angular';
-import { ClientData } from '../../providers/client-data';
 import { ClientDetailPage } from '../../pages/client-detail/client-detail'
 import { ProgramViewEditPage } from '../../pages/program-view-edit/program-view-edit';
 
@@ -9,27 +8,21 @@ import { ProgramViewEditPage } from '../../pages/program-view-edit/program-view-
   templateUrl: 'client-view-home.html'
 })
 export class ClientViewHomePage {
-  clientUsername: any;
-  clientDetails: any;
+  client: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public clientData: ClientData) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-    this.clientUsername = navParams.get('clientusername');
-    this.clientData = clientData;
-    this.clientData.getClientDetails(this.clientUsername).on('value', (data) => {
-      this.clientDetails = data.val();
-
-    });
+    this.client = navParams.get('client');
 
   }
-  goToClientDetailPage(clientusername: string){
+  goToClientDetailPage(){
       this.navCtrl.push(ClientDetailPage, {
-        clientusername: clientusername
+        client: this.client
       });
   }
-  goToClientProgramPage(clientusername: string){
+  goToClientProgramPage(){
     this.navCtrl.push(ProgramViewEditPage, {
-      clientusername: clientusername
+      client: this.client
     });
   }
 

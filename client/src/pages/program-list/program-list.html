@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>
+      Exercise Database
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showAddProgramModal()"><ion-icon name="add"></ion-icon></button>
+    </ion-buttons>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="logout()"><ion-icon name="power"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="bgAuth">
+
+  <ion-list transparent>
+
+    <ion-item-sliding *ngFor="let program of programs" transparent>
+
+      <ion-item >
+        <ion-card>
+          <ion-row>
+            <ion-col width-25>
+              <ion-thumbnail item-left>
+                <img src="../assets/img/person-icon.png">
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col width-75>
+              <ion-card-header>
+
+                {{program.title}}
+              </ion-card-header>
+              <ion-card-content>
+                {{program.description}}
+                <ion-item *ngFor="let exercise of program.exercises">
+                  {{exercise.name}}, {{exercise.sets}}
+                </ion-item>
+              </ion-card-content>
+            </ion-col>
+          </ion-row>
+        </ion-card>
+      </ion-item>
+
+      <ion-item-options side="right">
+        <button ion-button color="danger" (click)="deleteProgram(program)">
+          <ion-icon name="trash"></ion-icon>
+          Delete
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+
+  </ion-list>
+
+</ion-content>

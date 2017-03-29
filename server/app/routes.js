@@ -1,5 +1,6 @@
 var AuthenticationController = require('./controllers/authentication'),  
-    TodoController = require('./controllers/todos'),  
+    ExerciseController = require('./controllers/exercises'), 
+    ProgramController = require('./controllers/programs'),  
     express = require('express'),
     passportService = require('../config/passport'),
     passport = require('passport');
@@ -11,24 +12,39 @@ module.exports = function(app){
  
     var apiRoutes = express.Router(),
         authRoutes = express.Router(),
-        todoRoutes = express.Router();
+        exerciseRoutes = express.Router(),
+        programRoutes = express.Router();
  
     // Auth Routes
     apiRoutes.use('/auth', authRoutes);
  
-    authRoutes.post('/register', AuthenticationController.register);
+    authRoutes.post('/register', AuthenticationController.registerUser);
+    
     authRoutes.post('/login', requireLogin, AuthenticationController.login);
  
     authRoutes.get('/protected', requireAuth, function(req, res){
-        res.send({ content: 'Success'});
+        res.sendStatus({ content: 'Success'});
     });
+    authRoutes.get('/:trainerid', requireAuth, AuthenticationController.roleAuthorization(['trainer']), AuthenticationController.getClients);
+    authRoutes.delete('/delete/:user_id', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), AuthenticationController.deleteClient);
+    authRoutes.get('/clientdetail/:client_id', requireAuth, AuthenticationController.roleAuthorization(['trainer']), AuthenticationController.getClientDetails);
+    // Exercise Routes
+    apiRoutes.use('/exercises', exerciseRoutes);
  
-    // Todo Routes
-    apiRoutes.use('/todos', todoRoutes);
+    exerciseRoutes.get('/', requireAuth, AuthenticationController.roleAuthorization(['client','trainer','admin']), ExerciseController.getExercises);
+    exerciseRoutes.get('/', requireAuth, AuthenticationController.roleAuthorization(['client','trainer','admin']), ExerciseController.getExercises);
+    exerciseRoutes.post('/', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), ExerciseController.createExercise);
+    exerciseRoutes.delete('/:exercise_id', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), ExerciseController.deleteExercise);
  
-    todoRoutes.get('/', requireAuth, AuthenticationController.roleAuthorization(['reader','creator','editor']), TodoController.getTodos);
-    todoRoutes.post('/', requireAuth, AuthenticationController.roleAuthorization(['creator','editor']), TodoController.createTodo);
-    todoRoutes.delete('/:todo_id', requireAuth, AuthenticationController.roleAuthorization(['editor']), TodoController.deleteTodo);
+    // Program Routes
+    apiRoutes.use('/programs', programRoutes);
+ 
+    programRoutes.get('/', requireAuth, AuthenticationController.roleAuthorization(['client','trainer','admin']), ProgramController.getPrograms);
+    programRoutes.get('/trainer/:trainer_id', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), ProgramController.getTrainerPrograms);
+    programRoutes.get('/client_programs/:client_id', requireAuth, AuthenticationController.roleAuthorization(['client','trainer','admin']), ProgramController.returnClientPrograms);
+    programRoutes.post('/', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), ProgramController.createProgram);
+    programRoutes.post('/client/:client_id', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), ProgramController.addClientProgram);
+    programRoutes.delete('/:exercise_id', requireAuth, AuthenticationController.roleAuthorization(['trainer','admin']), ProgramController.deleteProgram);
  
     // Set up routes
     app.use('/api', apiRoutes);

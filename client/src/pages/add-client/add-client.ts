@@ -1,85 +1,81 @@
-import {NavController, LoadingController, AlertController, NavParams} from 'ionic-angular';
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { AuthData } from '../../providers/auth-data'
-import { Auth, User} from '@ionic/cloud-angular';
-import firebase from 'firebase';
+import { Auth } from '../../providers/auth';
+import { NavController , ModalController, AlertController, LoadingController, ViewController, ToastController} from 'ionic-angular';
+import {Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Storage } from '@ionic/storage';
+import { ClientService } from '../../providers/client-service'
+
 
 @Component({
   selector: 'page-add-client',
   templateUrl: 'add-client.html'
 })
 export class AddClientPage {
-  public signupForm;
-  emailChanged: boolean = false;
-  passwordChanged: boolean = false;
-  nameChanged: boolean = false;
-  usernameChanged: boolean = false;
-  submitAttempt: boolean = false;
+
+
+  trainerId: any;
+  clientform : FormGroup;
   loading: any;
-  trainerUsername: any;
-  userProfile: any;
-  clientList: any;
 
 
-  constructor(public nav: NavController, public authData: AuthData, public formBuilder: FormBuilder,
-              public loadingCtrl: LoadingController, public alertCtrl: AlertController,
-              public navParams: NavParams,public auth: Auth, public user: User) {
-    this.trainerUsername = this.user.details.username;
+  constructor(public storage: Storage, public clientService: ClientService, public toastCtrl: ToastController, public navCtrl: NavController,public viewCtrl: ViewController, private formBuilder: FormBuilder,public modalCtrl: ModalController,
+              public alertCtrl: AlertController, public authService: Auth, public loadingCtrl: LoadingController) {
+    this.storage.get('user').then((value) => {
 
-    this.signupForm = formBuilder.group({
-      email: ['', Validators.compose([Validators.required])],
-      name : ['',Validators.compose([Validators.required])],
-      username: ['', Validators.compose([Validators.required])]
-    })
-    this.userProfile = firebase.database().ref('/userProfile');
+      this.trainerId = value._id;
+      console.log(this.trainerId);
+      });
+
+    this.clientform = this.formBuilder.group({
+      email: ['', Validators.required],
+      password: ['',Validators.required],
+      role: ['client'],
+      name:['',Validators.required],
+      trainer:['']
+    });
 
   }
+  registerClient(){
 
-  /**
-   * Receives an input field and sets the corresponding fieldChanged property to 'true' to help with the styles.
-   */
-  elementChanged(input){
-    let field = input.inputControl.name;
-    this[field + "Changed"] = true;
-  }
-
-
-  /**
-   * If the form is valid it will call the AuthData service to sign the user up password displaying a loading
-   *  component while the user waits.
-   *
-   * If the form is invalid it will just log the form value, feel free to handle that as you like.
-   */
-  signupClient(){
-    this.submitAttempt = true;
-
-
-    if (!this.signupForm.valid){
-      console.log(this.signupForm.value);
-    } else {
-      this.loading = this.loadingCtrl.create({
-        dismissOnPageChange: true,
-      });
-      this.loading.present();
-      var randomPass = "";
-      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      for( var i=0; i < 7 ; i++ ) {
-        randomPass += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-
-      this.authData.signUpClient(this.signupForm.value.email,randomPass,this.signupForm.value.name, this.signupForm.value.username);
-      this.authData.createClientProfile(this.signupForm.value.username, this.signupForm.value.email, this.signupForm.value.name,
-                                        this.user.details.username);
-      firebase.database().ref('userProfile/' + this.trainerUsername + '/clientList/' + this.signupForm.value.username ).set({
-        email: this.signupForm.value.email,
-        name: this.signupForm.value.name,
-        username: this.signupForm.value.username,
-        trainerUsername: this.trainerUsername
-      });
-      this.authData.sendInitialPasswordReset(this.signupForm.value.email);
+    this.showLoader();
+    this.clientform.patchValue({trainer: this.trainerId});
+    let details = this.clientform.value;
+    console.log(details);
+    this.clientService.createClientAccount(details).then((result) => {
       this.loading.dismiss();
-      this.nav.pop();
-    }
+      console.log(result);
+      let toast = this.toastCtrl.create({
+        message: "Client Created",
+        duration: 3000,
+        position: 'top'
+      });
+      toast.present();
+      this.viewCtrl.dismiss();
+    }, (err) => {
+      this.loading.dismiss();
+      console.log("not allowed");
+      let toast = this.toastCtrl.create({
+        message: "Not Allowed",
+        duration: 3000,
+        position: 'top'
+      });
+      toast.present();
+      this.viewCtrl.dismiss();
+
+
+    });
+  }
+
+  showLoader(){
+
+    this.loading = this.loadingCtrl.create({
+      content: 'Authenticating...'
+    });
+
+    this.loading.present();
+
+  }
+  dismiss() {
+    this.viewCtrl.dismiss()
   }
 }

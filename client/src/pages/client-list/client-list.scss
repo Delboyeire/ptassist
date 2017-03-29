@@ -1,5 +1,5 @@
 page-client-list {
-  .bg {
+  .bgAuth {
     background-image: url('../assets/img/bg92sq.jpg');
     background-size: cover;
     &:before {
@@ -11,19 +11,47 @@ page-client-list {
       height: 100%;
     }
   }
- .client-list ion-item {
+  ion-list{
+    background-color: transparent !important;
+    ion-item-sliding{
+      background-color: transparent !important;
 
+      ion-item{
 
+        ion-card{
+          background-color: color($colors, danger) !important;
+          color: color($colors, light) !important;
+          ion-card-header{
+            color: color($colors, light) !important;
+          }
 
+        }
+      }
+    }
+  }
+  .img-container {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    align-content: center;
 
-
-   button{
-     border-left: 5px solid white;
-     border: 2px solid color($colors, dark);
-     padding-left: 10px;
-   }
-
- }
+  }
+  .item {
+    background-color: transparent;
+    border: none !important;
+    .item-inner {
+      border-bottom: 0.55px solid rgba(255, 255, 255, 0.4) !important;
+      ion-input {
+        color: color($colors, dark);
+        font-weight: bold;
+      }
+      ion-label {
+        color: color($colors, dark);
+        font-weight: bold;
+        font-size: large;
+      }
+    }
+  }
 
 
 

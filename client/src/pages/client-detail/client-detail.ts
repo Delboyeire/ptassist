@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController , NavParams} from 'ionic-angular';
-import { ClientData } from '../../providers/client-data';
+
 
 /*
   Generated class for the ClientDetail page.
@@ -13,19 +13,12 @@ import { ClientData } from '../../providers/client-data';
   templateUrl: 'client-detail.html'
 })
 export class ClientDetailPage {
-  clientUsername: any;
-  clientDetails: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, public clientData: ClientData) {
+  client: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
 
-    this.clientUsername = navParams.get('clientusername');
-    this.clientData = clientData;
-    this.clientData.getClientDetails(this.clientUsername).on('value', (data) => {
-      this.clientDetails = data.val();
+    this.client = navParams.get('client');
 
-    });
-    console.log(this.clientDetails.name);
-    console.log(this.clientDetails.username);
-    console.log(this.clientDetails.email);
+
   }
 
 

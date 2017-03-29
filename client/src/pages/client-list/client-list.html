@@ -3,21 +3,46 @@
     <ion-title>ClientList</ion-title>
   </ion-navbar>
 </ion-header>
+<ion-content class="bgAuth">
 
-
-<ion-content padding class="bg">
-    <button ion-button icon-left block color="danger" (click)="goToAddClient(trainerId)">
+    <button ion-button icon-left block color="danger" (click)="showAddClientModal()">
       <ion-icon name="add"></ion-icon>
       Add A  New Client
     </button>
-  <ion-list class="client-list">
-    <ion-item  *ngFor="let client of clientList" >
-      <button ion-item color="danger" (click)="goToClientViewHome(client?.username)">
-        <ion-icon name="contact" item-left></ion-icon>
-        <h2>{{client?.name}}</h2>
-        <p>{{client?.email}}</p>
-      </button>
+<ion-list transparent>
+
+  <ion-item-sliding *ngFor="let client of clientList" transparent>
+
+    <ion-item (click)="goToClientViewHome(client)">
+      <ion-card>
+        <ion-row>
+          <ion-col width-25>
+            <ion-thumbnail>
+              <img src="../assets/img/person-icon.png">
+            </ion-thumbnail>
+
+          </ion-col>
+          <ion-col width-75>
+            <ion-card-header>
+
+              {{client?.name}}
+            </ion-card-header>
+            <ion-card-content>
+              {{client?.email}}
+            </ion-card-content>
+          </ion-col>
+        </ion-row>
+      </ion-card>
     </ion-item>
 
-  </ion-list>
+    <ion-item-options side="right">
+      <button ion-button color="danger" (click)="deleteClient(client)">
+        <ion-icon name="trash"></ion-icon>
+        Delete
+      </button>
+    </ion-item-options>
+
+  </ion-item-sliding>
+
+</ion-list>
 </ion-content>

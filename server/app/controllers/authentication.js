@@ -12,27 +12,33 @@ function setUserInfo(request){
     return {
         _id: request._id,
         email: request.email,
-        role: request.role
+        role: request.role,
+        trainer: request.trainer,
+        programs: request.programs,
+        name: request.name
     };
 }
  
 exports.login = function(req, res, next){
  
     var userInfo = setUserInfo(req.user);
- 
+    console.log(userInfo)
     res.status(200).json({
         token: 'JWT ' + generateToken(userInfo),
         user: userInfo
     });
+    
  
 }
  
-exports.registerTrainer = function(req, res, next){
- 
+exports.registerUser = function(req, res, next){
+    console.log("In register function");
     var email = req.body.email;
     var password = req.body.password;
     var role = req.body.role;
- 
+    var trainer = req.body.trainer;
+    var programs= req.body.programs;
+    var name = req.body.name;
     if(!email){
         return res.status(422).send({error: 'You must enter an email address'});
     }
@@ -54,7 +60,10 @@ exports.registerTrainer = function(req, res, next){
         var user = new User({
             email: email,
             password: password,
-            role: role
+            role: role,
+            trainer: trainer,
+            programs: programs,
+            name: name
         });
  
         user.save(function(err, user){
@@ -101,3 +110,51 @@ exports.roleAuthorization = function(roles){
     }
  
 }
+exports.getClientDetails = function(roles){
+ 
+    return function(req, res, next){
+ 
+        var client_id = req.client_id;
+ 
+        User.findById(client_id, function(err, foundUser){
+ 
+            if(err){
+                res.status(422).json({error: 'No client found.'});
+                return next(err);
+            }
+ 
+             res.json(foundUser);
+ 
+        });
+ 
+    }
+ 
+}
+exports.getClients = function(req, res, next){
+    
+        var trainerid = req.params.trainerid;
+        User.find({trainer: trainerid},function(err, clients) {
+ 
+        if (err){
+            res.send(err);
+        }
+        res.json(clients);
+ 
+    });
+ 
+}
+exports.deleteClient = function(req, res, next){
+ 
+    User.remove({
+        _id : req.params.user_id
+    }, function(err, client) {
+        if (err){
+                res.send(err);
+        }
+
+        res.json(client);
+    });
+ 
+}
+ 
+ 

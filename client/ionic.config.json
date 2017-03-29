@@ -1,6 +1,16 @@
 {
   "name": "ptassist",
-  "app_id": "a986b96b",
+  "app_id": "f0c0fa4c",
   "v2": true,
-  "typescript": true
+  "typescript": true,
+  "proxies": [
+    {
+      "path": "/api",
+      "proxyUrl": "http://ptassist.heroku.com/api"
+    },
+    {
+      "path": "/api",
+      "proxyUrl": "http://localhost:8080/api/"
+    }
+  ]
 }
